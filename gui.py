@@ -14,22 +14,23 @@ class VentanaMain(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)  # inicia sizer
 
         # titulo
-        STextTitulo = wx.StaticText(self, -1, "10.000", style=wx.ALIGN_CENTER)  # texto titulo
+        STextTitulo = wx.StaticText(self.panel, -1, "", style=wx.ALIGN_CENTER)  # texto titulo
+        # quedo reemplazado por el titulo en el fondo, pero necesito el espacio vacio en el BoxSizer
         font = wx.Font(100, wx.ROMAN, wx.ITALIC, wx.NORMAL)  # fuente
         STextTitulo.SetFont(font)  # set fuente titulo
         STextTitulo.SetForegroundColour((200, 200, 200))  # color fondo
 
         # botones
-        buttonIniciar = wx.Button(self, -1, "Nueva partida", pos=(400, 200), size=(200, 50))  # boton empezar
-        buttonCargar = wx.Button(self, -1, "Cargar partida", pos=(400, 200), size=(200, 50))  # boton cargar
-        buttonReglas = wx.Button(self, -1, "Reglas", pos=(400, 200), size=(200, 50))  # boton ver reglas
-        buttonRanking = wx.Button(self, -1, "Ranking", pos=(400, 200), size=(200, 50))  # boton ver reglas
+        buttonIniciar = wx.Button(self.panel, -1, "Nueva partida", pos=(400, 200), size=(200, 50))  # boton empezar
+        buttonCargar = wx.Button(self.panel, -1, "Cargar partida", pos=(400, 200), size=(200, 50))  # boton cargar
+        buttonReglas = wx.Button(self.panel, -1, "Reglas", pos=(400, 200), size=(200, 50))  # boton ver reglas
+        buttonRanking = wx.Button(self.panel, -1, "Ranking", pos=(400, 200), size=(200, 50))  # boton ver reglas
 
         # eventos de los botones
-        self.Bind(wx.EVT_BUTTON, self.onClickIniciar, buttonIniciar)
-        self.Bind(wx.EVT_BUTTON, self.onClickCargar, buttonCargar)
-        self.Bind(wx.EVT_BUTTON, self.onClickReglas, buttonReglas)
-        self.Bind(wx.EVT_BUTTON, self.onClickRanking, buttonRanking)
+        self.panel.Bind(wx.EVT_BUTTON, self.onClickIniciar, buttonIniciar)
+        self.panel.Bind(wx.EVT_BUTTON, self.onClickCargar, buttonCargar)
+        self.panel.Bind(wx.EVT_BUTTON, self.onClickReglas, buttonReglas)
+        self.panel.Bind(wx.EVT_BUTTON, self.onClickRanking, buttonRanking)
 
         # agrega titulo y botones al sizer
         sizer.Add(STextTitulo, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.BOTTOM, 50)
@@ -39,9 +40,11 @@ class VentanaMain(wx.Frame):
         sizer.Add(buttonRanking, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.BOTTOM, 10)
 
         # fijar el sizer
-        self.SetSizer(sizer)
-        self.SetBackgroundColour((50, 80, 163))
+        self.panel.SetSizer(sizer)
         self.Centre(True)
+
+        # imagen de fondo
+        self.panel.Bind(wx.EVT_ERASE_BACKGROUND, self.background)
 
     def onClickIniciar(self, event):
         """evento al hacer click en boton iniciar el juego
@@ -78,6 +81,17 @@ class VentanaMain(wx.Frame):
            abre la pantalla que muestra el ranking"""
         ventanaRanking = VentanaRanking()
         ventanaRanking.Show()
+
+    def background (self, event):
+        """Fija la imagen de fondo"""
+        dc = event.GetDC()
+        if not dc:
+            dc = wx.ClientDC(self)
+            rect = self.GetUpdateRegion().GetBox()
+            dc.SetClippingRegion(rect)
+        dc.Clear()
+        fondo = wx.Bitmap('./assets/fondo.bmp')
+        dc.DrawBitmap(fondo, 0, 0)
 
 
 class VentanaRanking(wx.Frame):
@@ -1340,7 +1354,7 @@ class VentanaGanador(wx.Frame):
 
 # mainloop
 if __name__ == '__main__':
-    app = wx.App()
+    app = wx.App(False)
     frame = VentanaMain()
     frame.Show()
     app.MainLoop()
