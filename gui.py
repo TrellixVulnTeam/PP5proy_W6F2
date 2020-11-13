@@ -466,11 +466,11 @@ class VentanaJuego(wx.Frame):
     """Ventana en la que se juega - indica jugador, ptos acumulados, y los dados"""
     def __init__(self, juego, dados, puntosTirada):
         super().__init__(None, title="10.000 - Jugar", size=(900, 500), style = wx.DEFAULT_FRAME_STYLE &
-                                                                                ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.CLOSE_BOX))  # incia frame
+                                                                                ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))  # incia frame
         self.SetIcon(wx.Icon("./assets/icon.ico", wx.BITMAP_TYPE_ICO))  # icono de la ventana
 
         # musica de fondo
-        pygame.init()  # inciar el mixer
+        pygame.mixer.init()  # inciar el mixer
         pygame.mixer.music.load("./assets/Sediment_Pool.wav")  # cargar archivo
         pygame.mixer.music.play(-1)  # reproducir en loop
 
