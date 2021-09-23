@@ -1,4 +1,4 @@
-# PP5proy 2020
+# 10mil - Proyecto paradigmas V 2020
 
 ## Objetivo del trabajo práctico
 Se deberá realizar una aplicación gráfica que implemente el juego, incluyendo el siguiente
